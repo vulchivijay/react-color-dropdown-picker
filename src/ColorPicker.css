@@ -1,0 +1,21 @@
+.rcp-root { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+.rcp-select { position: relative; display: inline-block; }
+.rcp-toggle { display: inline-flex; gap: 8px; align-items: center; padding: 6px 8px; border: 1px solid #ddd; background: white; cursor: pointer; }
+.rcp-dropdown { position: absolute; left: 0; top: calc(100% + 6px); background: white; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,0.12); z-index: 10; }
+.rcp-dropdown ul { list-style: none; margin: 0; padding: 8px; min-width: 220px; }
+.rcp-swatch-btn { display: inline-flex; gap: 8px; align-items: center; background: transparent; border: none; padding: 6px; width: 100%; text-align: left; }
+.rcp-item-name { flex: 1; }
+.rcp-item { display: flex; align-items: center; gap: 8px; }
+.rcp-swatch { width: 22px; height: 22px; border: 1px solid #ccc; display: inline-block; vertical-align: middle; margin-right: 8px; border-radius: 3px; cursor: pointer; }
+.rcp-name { flex: 1; }
+.rcp-item-actions { display: flex; gap: 6px; }
+.rcp-icon { background: transparent; border: none; cursor: pointer; padding: 4px; }
+
+.rcp-modal { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+.rcp-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
+.rcp-modal-panel { position: relative; background: white; border-radius: 6px; padding: 16px; min-width: 320px; z-index: 2; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+.rcp-field { margin-top: 8px; display: flex; gap: 8px; align-items: center; }
+.rcp-field-label { width: 60px; font-size: 13px; color: #333; }
+.rcp-field input[type="number"] { width: 72px; }
+.rcp-rgb { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+.rcp-preview { width: 48px; height: 48px; border: 1px solid #ccc; border-radius: 4px; }
