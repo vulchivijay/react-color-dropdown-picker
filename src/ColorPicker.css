@@ -1,15 +1,20 @@
 .rcp-root { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
 .rcp-select { position: relative; display: inline-block; }
 .rcp-toggle { display: inline-flex; gap: 8px; align-items: center; padding: 6px 8px; border: 1px solid #ddd; background: white; cursor: pointer; }
+.rcp-toggle[aria-expanded="true"] .rcp-caret { transform: rotate(-180deg); }
 .rcp-dropdown { position: absolute; left: 0; top: calc(100% + 6px); background: white; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,0.12); z-index: 10; }
 .rcp-dropdown ul { list-style: none; margin: 0; padding: 8px; max-height: 200px; overflow-y: auto; }
 .rcp-swatch-btn { display: inline-flex; gap: 8px; align-items: center; background: transparent; border: none; padding: 6px; width: 100%; text-align: left; }
-.rcp-item-name { flex: 1; }
+.rcp-item-name { flex: 1; white-space: nowrap; }
 .rcp-item { display: flex; align-items: center; gap: 8px; }
-.rcp-swatch { width: 22px; height: 22px; border: 1px solid #ccc; display: inline-block; vertical-align: middle; margin-right: 8px; border-radius: 3px; cursor: pointer; }
+.rcp-item:hover { background-color: #ececec; }
+.rcp-item:hover .rcp-icon { opacity: 1; pointer-events: inherit; }
+.rcp-swatch { width: 22px; height: 22px; border: 1px solid #ccc; box-shadow: 2px 2px 4px rgba(0,0,0,.24); display: inline-block; vertical-align: middle; margin-right: 8px; border-radius: 3px; cursor: pointer; }
 .rcp-name { flex: 1; }
+.rcp-caret { transition: transform 500ms; }
 .rcp-item-actions { display: flex; gap: 6px; }
-.rcp-icon { background: transparent; border: none; cursor: pointer; padding: 4px; }
+.rcp-icon { opacity: 0; pointer-events: none; min-width: 26px; background: #fff; border: 1px solid rgba(0,0,0,.24); border-radius: 6px; box-shadow: 1px 1px 2px rgba(0,0,0,.24); cursor: pointer; padding: 4px; }
+.rcp-icon:hover { background-color: #333; color:#fff; }
 
 .rcp-modal { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
 .rcp-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }

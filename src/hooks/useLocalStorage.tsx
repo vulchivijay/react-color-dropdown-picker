@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 
-export default function useLocalStorage<T>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+export default function useLocalStorage<T>(
+  key: string,
+  initialValue: T
+): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [value, setValue] = useState<T>(() => {
     try {
       const item = localStorage.getItem(key);
@@ -14,7 +17,7 @@ export default function useLocalStorage<T>(key: string, initialValue: T): [T, Re
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch {
-      // ignore
+      // ignore errors
     }
   }, [key, value]);
 

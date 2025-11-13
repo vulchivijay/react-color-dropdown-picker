@@ -1,12 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import { hexToRgb, rgbToHex, tintHex } from './colorUtils';
+import { hexToRgb, hexToCMYK, rgbToHex, tintHex } from './colorUtils';
 import ColorModal from './ColorModal';
 import useLocalStorage from './hooks/useLocalStorage'
 // Field and NumberField are imported from shared primitives
 import { SavedItem } from './ui/Primitives';
 import { defaultColors } from './defaultColors';
 
-export type Color = string; // hex like #rrggbb
+export type Color = {
+  Name: string,
+  Value: string
+};
+
+// hex like #rrggbb
 export type ColorPickerProps = {
   value?: Color;
   onChange?: (color: Color) => void;
@@ -37,17 +42,20 @@ const DEFAULT_COLORS: SavedColor[] = defaultColors;
 const STORAGE_KEY = 'rcp:saved_colors';
 const STORAGE_SELECTED = 'rcp:selected_color';
 
+const DEFAULT_COLOR: Color = {
+  Name: DEFAULT_COLORS[0].Name,
+  Value: DEFAULT_COLORS[0].Value
+};
+
 const ColorPicker: React.FC<ColorPickerProps> = ({ value = '#ff0000', onChange, label = 'Choose color' }) => {
   const [openEditId, setOpenEditId] = useState<string | null>(null);
   const [editingFormat, setEditingFormat] = useState<'hex' | 'rgb' | 'hsl' | 'tint'>('hex');
   const [editingName, setEditingName] = useState('');
-  const [editingValue, setEditingValue] = useState<Color>(value);
+  const [editingValue, setEditingValue] = useState<Color>(DEFAULT_COLOR);
   const [tintPreviewPct, setTintPreviewPct] = useState<number | null>(null);
-  const [selectedColor, setSelectedColor] = useLocalStorage<string>(STORAGE_SELECTED, DEFAULT_COLORS[0].Value);
+  const [selectedColor, setSelectedColor] = useLocalStorage<Color>(STORAGE_SELECTED, DEFAULT_COLOR);
   const [savedColors, setSavedColors] = useLocalStorage<SavedColor[]>(STORAGE_KEY, DEFAULT_COLORS);
-  console.log(selectedColor);
-  console.log(savedColors);
-  const currentRgb = useMemo(() => hexToRgb(editingValue), [editingValue]);
+  const currentRgb = useMemo(() => hexToRgb(editingValue.Value), [editingValue]);
   const itemsCount = savedColors.length + 1; // saved + custom
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -66,34 +74,66 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value = '#ff0000', onChange, 
       const c = savedColors.find((s) => s.Id === id)!;
       setOpenEditId(id);
       setEditingName(c.Name);
-      setEditingValue(c.Value);
+      // setEditingValue(c.Value);
       setEditingFormat('hex');
     } else {
-      setOpenEditId('new');
+      setOpenEditId("new");
       setEditingName('');
-      setEditingValue('#000000');
+      // setEditingValue('#000000');
       setEditingFormat('hex');
     }
   };
 
   const saveEdited = () => {
-    let finalValue = editingValue;
+    let finalValue = editingValue.Value;
+    const { r, g, b } = hexToRgb(finalValue);
+    const { c, m, y, k } = hexToCMYK(finalValue);
     if (editingFormat === 'tint' && tintPreviewPct != null) {
-      finalValue = tintHex(editingValue, tintPreviewPct);
+      finalValue = tintHex(editingValue.Value, tintPreviewPct);
     }
-    if (openEditId === itemsCount) {
+    if (openEditId === "new") {
+      // new color adding.
       setSavedColors((s) => [...s,
       {
-        Id: itemsCount,
+        Id: `c${itemsCount}`,
         Name: editingName || 'Untitled',
-        Value: finalValue
+        ColorBrush: null,
+        IsCustom: true,
+        ColorType: 0,
+        Alpha: 255,
+        R: r,
+        G: g,
+        B: b,
+        C: c,
+        M: m,
+        Y: y,
+        K: k,
+        Tint: 0,
+        Value: finalValue,
+        IsBlack: false,
+        IsWhite: false
       }
       ]);
     } else if (openEditId) {
+      // update existing color
       setSavedColors((s) => s.map((c) => (c.Id === openEditId ? {
-        ...c,
-        name: editingName,
-        value: finalValue
+        Id: c.Id,
+        Name: editingName,
+        ColorBrush: c.ColorBrush,
+        IsCustom: c.IsCustom,
+        ColorType: 0,
+        Alpha: c.Alpha,
+        R: c.R,
+        G: c.G,
+        B: c.B,
+        C: c.C,
+        M: c.M,
+        Y: c.Y,
+        K: c.K,
+        Tint: c.Tint,
+        Value: finalValue,
+        IsBlack: c.IsBlack,
+        IsWhite: c.IsWhite
       } : c
       )));
     }
@@ -133,6 +173,11 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value = '#ff0000', onChange, 
         <button className="rcp-toggle" onClick={() => setDropdownOpen((s) => !s)} onKeyDown={onToggleKeyDown} aria-haspopup="menu" aria-expanded={dropdownOpen}>
           <span className="rcp-swatch" style={{ background: selectedColor }} aria-hidden />
           <span className="rcp-name">{savedColors.find(s => s.Value === selectedColor)?.Name ?? selectedColor}</span>
+          <span className="rcp-caret">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </span>
         </button>
         {dropdownOpen && (
           <div className="rcp-dropdown" role="menu">

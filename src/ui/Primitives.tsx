@@ -37,10 +37,12 @@ export const SavedItem: React.FC<{
       <span className="rcp-swatch" style={{ background: c.Value }} aria-hidden />
       <span className="rcp-item-name">{c.Name}</span>
     </button>
-    <div className="rcp-item-actions">
-      <button aria-label={`edit-${c.Id}`} className="rcp-icon" onMouseDown={(e) => e.preventDefault()} onClick={() => { onEdit(c.Id); close?.(); }}>✎</button>
-      <button aria-label={`delete-${c.Id}`} className="rcp-icon" onMouseDown={(e) => e.preventDefault()} onClick={() => { onDelete(c.Id); close?.(); }}>🗑</button>
-    </div>
+    {c.IsCustom && (
+      <div className="rcp-item-actions">
+        <button aria-label={`edit-${c.Id}`} className="rcp-icon" onMouseDown={(e) => e.preventDefault()} onClick={() => { onEdit(c.Id); close?.(); }}>✎</button>
+        <button aria-label={`delete-${c.Id}`} className="rcp-icon" onMouseDown={(e) => e.preventDefault()} onClick={() => { onDelete(c.Id); close?.(); }}>🗑</button>
+      </div>
+    )}
   </li>
 );
 
