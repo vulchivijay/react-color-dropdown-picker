@@ -228,6 +228,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value = '#ff0000', onChange, 
                 <SavedItem
                   key={c.Id}
                   c={c}
+                  active={((selectedColor?.Value || '') as string).toLowerCase() === ((c.Value || '') as string).toLowerCase()}
                   onSelect={() => { handleSelect({ Name: c.Name, Value: c.Value }); setDropdownOpen(false); }}
                   onEdit={(id) => { openEditor(id); setDropdownOpen(false); }}
                   onDelete={(id) => { handleDelete(id); setDropdownOpen(false); }}
